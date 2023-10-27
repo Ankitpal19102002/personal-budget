@@ -1,0 +1,84 @@
+#include <stdio.h>
+
+#define MAX_TRANSACTIONS 100
+
+// Structure to represent a transaction
+struct Transaction {
+    char description[50];
+    double amount;
+};
+
+// Function to add a transaction
+void addTransaction(struct Transaction transactions[], int *count, const char *description, double amount) {
+    if (*count < MAX_TRANSACTIONS) {
+        struct Transaction newTransaction;
+        strcpy(newTransaction.description, description);
+        newTransaction.amount = amount;
+        transactions[(*count)++] = newTransaction;
+    } else {
+        printf("Transaction limit exceeded. Cannot add more transactions.\n");
+    }
+}
+
+// Function to display the transactions
+void displayTransactions(struct Transaction transactions[], int count) {
+    if (count == 0) {
+        printf("No transactions recorded.\n");
+    } else {
+        printf("Transactions:\n");
+        for (int i = 0; i < count; i++) {
+            printf("%d. Description: %s, Amount: %.2lf\n", i + 1, transactions[i].description, transactions[i].amount);
+        }
+    }
+}
+
+int main() {
+    struct Transaction transactions[MAX_TRANSACTIONS];
+    int count = 0;
+    char choice;
+
+    while (1) {
+        printf("\nPersonal Budget Management\n");
+        printf("1. Add Income\n");
+        printf("2. Add Expense\n");
+        printf("3. Display Transactions\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf(" %c", &choice);
+
+        switch (choice) {
+            case '1':
+                // Add income
+                double incomeAmount;
+                printf("Enter income description: ");
+                char incomeDescription[50];
+                scanf("%s", incomeDescription);
+                printf("Enter income amount: ");
+                scanf("%lf", &incomeAmount);
+                addTransaction(transactions, &count, incomeDescription, incomeAmount);
+                break;
+            case '2':
+                // Add expense
+                double expenseAmount;
+                printf("Enter expense description: ");
+                char expenseDescription[50];
+                scanf("%s", expenseDescription);
+                printf("Enter expense amount: ");
+                scanf("%lf", &expenseAmount);
+                addTransaction(transactions, &count, expenseDescription, -expenseAmount);
+                break;
+            case '3':
+                // Display transactions
+                displayTransactions(transactions, count);
+                break;
+            case '4':
+                // Exit the program
+                printf("Goodbye!\n");
+                return 0;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+
+    return 0;
+}
